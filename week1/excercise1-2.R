@@ -1,5 +1,5 @@
 # a) What is the median of the 251 achieved grades?
-data <- read.csv("C:\\Users\\madsn\\Documents\\Git\\Introduction-to-Statistics-Fall\\week1\\excercise2.csv", header=TRUE, stringsAsFactors=FALSE)
+data <- read.csv("C:\Users\madsn\Documents\Git\Introduction-to-Statistics-Fall\soenderborg1", header=TRUE, stringsAsFactors=FALSE)
 allScores = (data$total[1:7])
 
 # er lige meget medianen er 4
