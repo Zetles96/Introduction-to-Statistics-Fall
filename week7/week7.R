@@ -14,17 +14,17 @@ arrows(qexp(us, 1/2), us, qexp(us, 1/2), 0, lty = 3, length = 0.2)
 ### Simulation: Area of plates ###
 ##################################
 
-set.seed(345)
+set.seed(420)
 
-k = 10000 # Number of simulations 
-X = rnorm(k, 2, 0.01) 
-Y = rnorm(k, 3, 0.02) 
-A = X*Y 
+k <- 10000 # Number of simulations
+X <- rnorm(k, 2, 0.01)
+Y <- rnorm(k, 3, 0.02)
+A <- X*Y
 
 mean(A) 
 var(A) 
 mean(abs(A - 6) > 0.1)
-
+sum(abs(A - 6) > 0.1)
 ########################################################################
 ### Simulations: Mean of 10 exponential distributed random variables ###
 ########################################################################
