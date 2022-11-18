@@ -9,12 +9,12 @@ head(TVbo) # First rows of the data
 
 # Define factor identifying the 12 TV set and picture combinations 
 TVbo$TVPic <- factor(TVbo$TVset:TVbo$Picture)
- 
+
 # Each of 8 assessors scored each of the 12 combinations twice.
 # Average the two replicates for each assessor and combination of 
 # TV set and picture
 library(doBy)
-TVbonoise <- summaryBy(Noise ~ Assessor + TVPic, data = TVbo, 
+TVbonoise <- summaryBy(Noise ~ Assessor + TVPic, data = TVbo,
                        keep.names = T)
 
 # One-way ANOVA of the noise (not the correct analysis!)
@@ -38,7 +38,7 @@ treatm <- factor(c(1, 1, 1, 1,
                    3, 3, 3, 3))
 
 ## Plot data by treatment groups
-par(mfrow = c(1,2))
+par(mfrow = c(1, 2))
 plot(y ~ as.numeric(treatm), xlab = "Treatment", ylab = "y")
 boxplot(y ~ treatm, xlab = "Treatment", ylab = "y")
 
@@ -58,11 +58,11 @@ n <- 12
 xseq <- seq(0, 10, by = 0.1)
 
 # Plot density of the F-distribution
-plot(xseq, df(xseq, df1 = k-1, df2 = n-k), type = "l")
+plot(xseq, df(xseq, df1 = k - 1, df2 = n - k), type = "l")
 
 # Plot critical value for significance level 5%
-cr <- qf(0.95, df1 = k-1, df2 = n-k)
-abline(v = cr, col = "red") 
+cr <- qf(0.95, df1 = k - 1, df2 = n - k)
+abline(v = cr, col = "red")
 
 ############################################
 ### One-way ANOVA using anova() and lm() ###
@@ -77,23 +77,23 @@ anova(lm(y ~ treatm))
 k <- 3; n <- 12  # Number of groups k, total number of observations n
 
 # Total variation, SST
-(SST <- sum( (y - mean(y))^2 ))
+(SST <- sum((y - mean(y))^2))
 
 # Residual variance after model fit, SSE
 y1 <- y[1:4]; y2 <- y[5:8]; y3 <- y[9:12]
 
-(SSE <- sum( (y1 - mean(y1))^2 ) + 
-        sum( (y2 - mean(y2))^2 ) + 
-        sum( (y3 - mean(y3))^2 ))
+(SSE <- sum((y1 - mean(y1))^2) +
+  sum((y2 - mean(y2))^2) +
+  sum((y3 - mean(y3))^2))
 
 # Variance explained by the model, SS(Tr)
 (SSTr <- SST - SSE)
 
 # Test statistic
-(Fobs <- (SSTr/(k-1)) / (SSE/(n-k)))
+(Fobs <- (SSTr / (k - 1)) / (SSE / (n - k)))
 
 # P-value
-(1 - pf(Fobs, df1 = k-1, df2 = n-k))
+(1 - pf(Fobs, df1 = k - 1, df2 = n - k))
 
 ########################
 ### Model validation ###
@@ -108,4 +108,42 @@ fit1 <- lm(y ~ treatm)
 qqnorm(fit1$residuals)
 qqline(fit1$residuals)
 
+
+################## example ###################
+D <- data.frame(
+  strength = c(44.6, 52.8, 53.1, 51.5, 48.2, 50.5, 58.3, 50.0, 53.7, 40.8,
+               46.3, 55.4, 54.4, 50.5, 44.5, 48.5, 57.4, 55.3, 54.4, 43.9,
+               45.2, 58.1, 50.6, 47.5, 45.9, 52.3, 54.6, 53.4, 47.8, 42.5),
+  plastictype = factor(rep(1:5, 6))
+)
+plot(D$plastictype, D$strength, xlab = "Plastictype", ylab = "Strength")
+
+fit <- lm(strength ~ plastictype, data = D)
+anova(fit)
+qqnorm(fit$residuals)
+qqline(fit$residuals)
+
+library(MESS)
+
+qqwrap <- function(x, y, ...) {
+    stdy <- (y - mean(y)) / sd(y)
+    qqnorm(stdy, main = "", ...)
+    qqline(stdy) }
+
+wallyplot(fit$residuals, FUN = qqwrap, ylim = c(-3, 3))
+
+tapply(D$strength, D$plastictype, mean)
+
+###### calculate alafa #######
+k <- 5
+M <- (k * (k - 1)) / 2
+alapha <- 0.005 / M
+alapha
+prop_bon <- 1 - alapha / 2
+prop_bon
+
+##### LSD (❁´◡`❁) #####
+
+LSD_0.005 <- qt(0.9975, 25) * sqrt(2 * 6.74 / 6)
+LSD_0.005
 
